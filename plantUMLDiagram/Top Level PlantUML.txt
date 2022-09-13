@@ -1,0 +1,46 @@
+@startuml
+
+node gyroscopeAndAccelerometer as g1
+node pressureSensor as p1
+node proximitySensor as p2
+node motor as m
+node arduino as a
+node ballast1 as b1
+node ballast2 as b2
+node buoy 
+node battery 
+node pump as p3
+circle solenoid1 as s1
+circle solenoid2 as s2
+circle solenoid3 as s3
+circle solenoid4 as s4
+
+a -- p1
+a -- p2
+a -- g1
+a -- m
+a -- p3
+
+
+p3 -- s1
+s1 --> s3
+s3 -- b1
+
+p3 -- s2
+s2 --> s4
+s4 -- b2
+
+battery -> a : powers 9v 
+
+g1 --> p3 : y angle data (roll)
+
+g1 --> m : x angle data (pitch)
+
+buoy --> a : gps data
+
+p3 --> a : amount of fluid and time pumped
+
+p1 --> m : depth reading to control pitch
+p2 -->a : distance obstacles are from nose
+
+@enduml
