@@ -1,0 +1,130 @@
+#include <SD.h>
+#include <SPI.h>
+#include <SoftwareSerial.h>
+#include "TinyGPS++.h"
+
+File myFile;
+int RXPin = 7;    // GPS Connections
+int TXPin = 6;
+const int recLED = 9; // Write LED
+
+TinyGPSPlus gps;
+SoftwareSerial SerialGPS(RXPin, TXPin); // SoftwareSerial connection to the GPS device
+
+String Latitude, Longitude, Altitude, Speed, day, month, year, hour, minute, second, Date, Time, Data;  // String to hold GPS data
+
+void setup() 
+{
+  pinMode(recLED, OUTPUT);  // Set LED pin as output
+  Serial.begin(9600);   // Start Serial Monitor for debugging
+  while (!Serial) {
+    ; 
+ }
+
+
+  Serial.print("Initializing SD card...");  // Initialize SD card
+
+  if (!SD.begin(10)) {    // Start SoftwareSerial
+    Serial.println("initialization failed!");
+    while (1);
+  }
+  Serial.println("initialization done.");
+  Serial.println("Creating GPS_data.txt...");
+  myFile = SD.open("GPS_data.txt", FILE_WRITE);
+  if (myFile) {
+    myFile.println( "Latitude, Longitude, Altitude, Date and Time \r\n");
+    myFile.close();
+
+  } else {
+    Serial.println("error opening GPS_data.txt");
+  }
+ SerialGPS.begin(9600);
+
+  digitalWrite(recLED, HIGH); // Blink LED so we know we are ready
+  delay(500);
+  digitalWrite(recLED, LOW);
+  delay(500);
+  digitalWrite(recLED, HIGH);
+  delay(500);
+  digitalWrite(recLED, LOW);
+  delay(500);
+  digitalWrite(recLED, HIGH);
+  delay(500);
+  digitalWrite(recLED, LOW);
+}
+
+void loop() {
+
+     while (SerialGPS.available() > 0)
+    if (gps.encode(SerialGPS.read()))
+      obtain_data();
+  if (millis() > 5000 && gps.charsProcessed() < 10)
+  {
+    Serial.println("GPS NOT DETECTED!");
+    while(true);
+  }
+
+}
+
+void obtain_data()
+{
+  if (gps.location.isValid())
+  {
+    Latitude = String(gps.location.lat(), 6);
+    Longitude = String(gps.location.lng(),6);
+    Altitude = gps.altitude.meters();
+    Speed = gps.speed.mph();
+  }
+  else
+  {
+    Serial.println("Location is not available");
+  }
+  
+  if (gps.date.isValid())
+  {
+    month = gps.date.month();
+    day = gps.date.day();
+    year = gps.date.year();
+    Date = month + "-" + day + "-" + year;
+     Serial.println(Date);
+  }
+  else
+  {
+    Serial.print("Date Not Available");
+  }
+ 
+  Serial.print("Time: ");
+  if (gps.time.isValid())
+  {
+    if (gps.time.hour() < 10) ;
+    hour = gps.time.hour();
+    if (gps.time.minute() < 10);
+    minute = gps.time.minute();
+    if (gps.time.second() < 10) ;
+    second = gps.time.second();
+    Time = hour + ":" + minute + ":" + second;
+  Serial.println(Time);
+  }
+  else
+  {
+    Serial.print("Time Not Available");
+  }
+
+  Data = Latitude + "," + Longitude + "," + Altitude + "," + Date + "," + Time + "," + Speed;
+  Serial.print("Save data: ");
+  Serial.println(Data);
+  myFile = SD.open("GPS_data.txt", FILE_WRITE);
+  digitalWrite(recLED, HIGH);    // LED On to indicate data to write to SD card
+
+  if (myFile) {
+    Serial.print("GPS logging to GPS_data.txt...");
+    myFile.println(Data);
+    myFile.close();
+    Serial.println("done.");
+  } else {
+    Serial.println("error opening GPS_data.txt");
+  } 
+ Serial.println();
+ digitalWrite(recLED, LOW);  // Turn off LED to singal data has been sussecfully logged
+ delay(10000);
+}
