@@ -1,0 +1,23 @@
+ //Pitch Balance Function 
+//int LowTolerance = -5degrees;
+//int Tolerancehigh = 5degrees;
+//int pitch;
+// int servo CW
+// int servo CCW
+
+// Do{
+  //Loop{
+   //if pitch < Tolerancelow
+     //     run servo CW for x time
+     //     wait a certain time
+      //     read pitch
+  //}
+
+  //Loop{
+   //if pitch> Tolerancehigh
+      //run servo CCW for x time
+      //wait a certain
+      //read pitch
+  //}
+
+//While pitch !=0
