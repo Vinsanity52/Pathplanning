@@ -1,0 +1,52 @@
+ //Roll Balance Function 
+//int Tolerancelow = -5degrees;
+//int Tolerancehigh = 5degrees;
+//int Roll;
+
+
+// Do{
+  //Loop{
+   //if Roll < Tolerancelow
+     //     call to CWRollBalance for x amouint of time
+     //     wait a certain time
+     //     call to CCWRollBalance for x amount of time, same amount as before to balance ballast water level
+      //     read Roll
+  //}
+
+  //Loop{
+   //if pitch> Tolerancehigh
+      // call to CCWRollBalance for x amount of time
+      //wait a certain time      
+      //call to CWRollBalance for x amount of time, same amount as before to balance ballast water level
+      //read Roll
+  //}
+
+//While Roll !=0
+
+//CWRollBlance Function
+// Activate Solenoids 1 and 4
+//Activate pump for certain time (small amount)
+//turn off pump
+//close solenoids 1 and 4
+
+
+//CCWRollBalance Function
+// Activate Solenoids 2 and 3
+//Activate pump for certain time (small amount)
+//turn off pump
+//close solenoids 2 and 3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
