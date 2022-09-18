@@ -1,0 +1,16 @@
+//Turning Right Function  
+//int Rollangle
+
+// Activate Solenoids 1 and 4
+//Activate pump for certain time (Large amount same as before)
+//turn off pump
+//close solenoids 1 and 4
+// hold until roll angle is achived with a tolerance 
+
+// Activate Solenoids 2 and 3
+//Activate pump for certain time (Large amount)
+//turn off pump
+//close solenoids 2 and 3
+
+
+//Call to Roll Balance function 
