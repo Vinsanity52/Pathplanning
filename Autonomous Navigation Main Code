@@ -1,0 +1,68 @@
+#include <TinyGPS++.h>  //built in library for GPS Module
+#include <SoftwareSerial.h>
+
+#define RX_PIN 3
+#define TX_PIN 2
+#define LED_PIN 7  //Pin for LED bulb 
+#define GPS_BAUD 9600
+#define WAYPOINT_THRESHHOLD 5 //Minimum distance we are from waypoint
+
+TinyGPSPlus gps;
+
+SoftwareSerial ss(RX_PIN, TX_PIN);
+
+void setup()  {
+  Serial.begin(9600);
+  ss.begin(GPS_BAUD);
+  pinMode(LED_PIN, OUTPUT);  //LED
+  
+  Serial.println("Waypoint Tracker");
+  
+  }
+  
+  void loop() {
+    double targetLat = 30.186279;   //Target Latitude (This is what gets changed)
+    double targetLon = -81.740026; //Target Longitude (This is what gets changed)
+    
+    while(ss.available() > 0)
+      gps.encode(ss.read());
+      
+      double dist = 0; 
+      
+    if (gps.location.isValid())  {
+      dist = distance(targetLat, targetLon, gps.location.lat(), gps.location.lng());  //Special function to calculate distance
+      Serial.println ("Distance to to target: ");
+      Serial.println(dist);
+     }
+     
+     if (dist < WAYPOINT_THRESHHOLD)   //Have we arrived at the waypoint?
+        digitalWrite(LED_PIN, HIGH);
+}
+
+/* The distance formula came from https://www.movable-type.co.uk/scripts/latlong.html which has some other formulas you 
+ * might find useful to navigation */
+ 
+double distance(double latl, double lonl, double lat2, double lon2)
+{
+    // Conversion factor from degrees to radians (pi/180)
+    const double toRadian = 0.01745329251;
+    
+    // First coordinate (Radians)
+    double lat1_r = lat1 * toRadian:
+    double lon1_r = lon1 * toRadian;
+    
+    // Second coordinate (Radians)
+    double lat2_r = lat2 * toRadian;
+    double lon2_r = lon2 * toRadian;
+    
+    // Delta coordinate
+    double deltaLat_r = (lat2 - lat1) * toRadian;
+    double deltaLon_r = (lon2 - lon1) * toRadian;
+    
+    // Distance
+  double a = sin(deltaLat_r/2)*sin(deltaLat_r/2) + cos(lat1_r) * cos(lat2_r) * sin(deltaLon_r/2) * sin(deltaLon_r/2);
+  double c = 2 * atan2(sqrt(a), sqrt(1-a));
+  double distance = 6371 * c * 1000;
+
+  return distance;
+}
