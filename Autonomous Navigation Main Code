@@ -33,10 +33,11 @@ void setup()  {
       dist = distance(targetLat, targetLon, gps.location.lat(), gps.location.lng());  //Special function to calculate distance
       Serial.println ("Distance to to target: ");
       Serial.println(dist);
-     }
-     
+      
      if (dist < WAYPOINT_THRESHHOLD)   //Have we arrived at the waypoint?
         digitalWrite(LED_PIN, HIGH);
+     }
+    
 }
 
 /* The distance formula came from https://www.movable-type.co.uk/scripts/latlong.html which has some other formulas you 
