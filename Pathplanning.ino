@@ -200,3 +200,31 @@ void turningRight()
   //Call to Roll Balance function 
 
 }
+
+// ------------------------------------------------------------------------------------------------------------
+// Code that utilizes sensors and informaiton gathered from the bouy
+
+
+int readCompass()
+{
+
+}
+int readGPS()
+{
+  
+}
+
+
+
+//---------------------------------------------------------------------------------------------------------------
+// Code involving on board sensors
+
+int readGyroscope()
+{
+
+}
+
+int readPressure()
+{
+
+}
