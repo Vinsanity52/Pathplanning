@@ -3,6 +3,10 @@ void setup() {
   int depthmin = 2ft(example);
   int depthmax = 20ft(example);
   float Waypoint = {Lat, Long};
+  float AngleTolerance = {.01,.01}
+  float DistTolerance = .01
+  bool send = false
+
 
   //-------------------------------------------------------------------------------------------------------
   primingSyringes();
@@ -14,27 +18,44 @@ void setup() {
 //----------------------------------------------------------------------------------------------------------
 // Main loop
 void loop() {
-  //while CartCompAng is not within tolerance 
-  //{
-    //loop buoyancy engine to keep forward momentum
-    //loop ballast correction
-    //CheckComp_GPS(Compass, GPS{})
+  //There should be something here to hold until the go command is sent
+  while(send == false)
+  {
+    CheckCommands();
+  }
 
-  //}
-  //once angle is matched proceed forward.
-  //While CartCompAng is within tolerance 
-  //{
-  //loop buoyancy engine
-  //CheckComp_GPS(Compass, GPS{})
-  //}
+  CheckCommands();
+  readCompass();
+  readGPS();
+  CheckComp_GPS();
 
+  if(Dist >= DistTolerance)
+  {
+    if(abs(AngleCorr) >= AngleTolerance) 
+    {
+      AngleCorrection();
+      rollBalance();
+      moveForward();
+      CheckComp_GPS(Compass, GPS{});
+
+    }
+    //once angle is matched proceed forward.
+    else if(abs(AngleCorr) <= AngleTolerance)
+    {
+      rollBalance();
+      moveForward();
+      CheckComp_GPS(Compass, GPS{});
+    }
+  }
+  else
+  send = false;
 
 }
 
 int CheckComp_GPS(GPS{}, Waypoint)
 {
-  readCompass()                                                        // Function that reads the current compass angle reading
-  readGPS()                                                            // Function that reads current Lat Long from GPS                                                 
+  readCompass();                                                        // Function that reads the current compass angle reading
+  readGPS();                                                            // Function that reads current Lat Long from GPS                                                 
   float CompAngle = CompassReadout;                                    //Compass readout angle
 
   float CartCompAng = {Cos(CompAngle), Sin(CompAngle)};                //Compass readout converted to unit circle Cartisiean angle
@@ -88,6 +109,11 @@ void moveForward()
       // check depth
     //else
         // check depth
+}
+
+void AngleCorrection()
+{
+    
 }
 
 void PitchBalance()
