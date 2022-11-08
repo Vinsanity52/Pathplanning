@@ -3,9 +3,9 @@ void setup() {
   int depthmin = 2ft(example);
   int depthmax = 20ft(example);
   float Waypoint = {Lat, Long};
-  float AngleTolerance = {.01,.01}
-  float DistTolerance = .01
-  bool send = false
+  float AngleTolerance = {.01,.01};
+  float DistTolerance = .01;
+  int command = 0;
 
 
   //-------------------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@ void setup() {
 // Main loop
 void loop() {
   //There should be something here to hold until the go command is sent
-  while(send == false)
+  while(command = 0)
   {
     CheckCommands();
   }
@@ -113,7 +113,7 @@ void moveForward()
 
 void AngleCorrection()
 {
-    
+
 }
 
 void PitchBalance()
@@ -251,6 +251,15 @@ int readGyroscope()
 }
 
 int readPressure()
+{
+
+}
+
+
+------------------------------------------------------------------------------------------------------------------
+// Mobile app communication code
+
+int CheckCommands()
 {
 
 }
